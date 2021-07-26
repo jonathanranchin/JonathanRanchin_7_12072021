@@ -17,7 +17,7 @@
               id="newComment"
               name="comment"
               rows="8"
-              placeholder=" Saisissez votre commentaire ici. (1500 caractères max) "
+              placeholder=" Comentez ici. (1500 caractères maximum) "
             ></textarea>
           </div>
         </div>
@@ -30,10 +30,7 @@
           >
         </div>
         <div v-show="isInvalid" key="invalid">
-          <p>
-            Vous devez renseigner la case " Saisissez votre commentaire ici en
-            respectant les instructions (1500 caractères max) "
-          </p>
+          <p>Saisissez votre commentaire (1500 caractères maximum) "</p>
         </div>
       </form>
     </section>

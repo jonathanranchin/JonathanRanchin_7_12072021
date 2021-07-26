@@ -5,9 +5,13 @@
         <router-link v-if="isAdmin" to="/Admin">
           <h1>Administration du site</h1>
         </router-link>
+        <p v-if="isAdmin == false">
+          Si vous êtes pas administrateur vous n'avez rien à faire sur cette
+          page!
+        </p>
         <Home></Home>
       </div>
-      <section id="fil-principal">
+      <section id="fil-principal" v-if="isAdmin">
         <article>
           <div>
             <div>

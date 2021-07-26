@@ -138,7 +138,7 @@ export default {
     deleteMessage(a, b, c) {
       console.log(typeof a, typeof b, typeof c);
       let confirmMessageDeletion = confirm(
-        "voulez-vous vraiment supprimer cette image ?, tous les commentaires associés seront également supprimés."
+        "Voulez-vous supprimer cette image ? Tous les commentaires associés seront également supprimés."
       );
       if (confirmMessageDeletion == true) {
         axios

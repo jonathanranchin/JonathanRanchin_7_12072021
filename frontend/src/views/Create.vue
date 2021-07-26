@@ -34,7 +34,6 @@
                 type="file"
                 ref="file"
                 name="image"
-                class="form-control-file"
                 id="File"
                 accept=".jpg, .jpeg, .gif, .png"
               />
@@ -51,8 +50,8 @@
         </div>
         <div v-show="isInvalid" key="invalid">
           <p>
-            Vous ne pouvez pas envoyer de post sans contenu (vous devez inclure
-            texte et image). Votre message doit faire moins de 1500 caractères.
+            Les posts doivent inclure une image et du texte 1500 charactère
+            maximum.
           </p>
         </div>
       </form>

@@ -6,8 +6,12 @@
           <h1>Administration du site</h1>
         </router-link>
         <Home></Home>
+        <p v-if="isAdmin == false">
+          Si vous êtes pas administrateur vous n'avez rien à faire sur cette
+          page!
+        </p>
       </div>
-      <section id="fil-principal">
+      <section id="fil-principal" v-if="isAdmin">
         <sub>
           <article>
             <div>

@@ -3,8 +3,11 @@
     <section>
       <h1>Administration du site</h1>
       <Home></Home>
+      <p v-if="isAdmin == false">
+        Si vous êtes pas administrateur vous n'avez rien à faire sur cette page!
+      </p>
     </section>
-    <section>
+    <section v-if="isAdmin">
       <div>
         <article>
           <div>

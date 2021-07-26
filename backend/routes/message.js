@@ -4,7 +4,7 @@ const auth = require("../middleware/auth");
 const messageCtrl = require("../controllers/messagesCtrl");
 const multer = require("../middleware/multer-config");
 
-router.post("/", auth, multer, messageCtrl.createMessage); // Post - Création des messages avec les images.
+router.post("/", auth, multer, messageCtrl.createMessage);
 
 router.get("/all/:id", messageCtrl.findAllMessagesForOne);
 
