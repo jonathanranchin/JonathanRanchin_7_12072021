@@ -1,0 +1,26 @@
+
+POST http://localhost:3000/api/auth/signup 
+Content-Type: application/json
+
+{
+    "userName": "JohnA",
+    "email" : "ab@ab.com", 
+    "password" : "azerty4055"
+}
+###
+POST http://localhost:3000/api/auth/login 
+Content-Type: application/json
+
+{
+    "email" : "ab@ab.com", 
+    "password" : "azerty4055"
+}
+###
+Get http://localhost:3000/api/comments/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImlhdCI6MTYyNjkwNjc0NCwiZXhwIjoxNjI2OTkzMTQ0fQ.drPf7yQJLR1mtAJY_GPJuAKNXOidvhK3mYAhw-70638
+###
+Get http://localhost:3000/api/messages/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImlhdCI6MTYyNjkwNjc0NCwiZXhwIjoxNjI2OTkzMTQ0fQ.drPf7yQJLR1mtAJY_GPJuAKNXOidvhK3mYAhw-70638
+###
+Get http://localhost:3000/api/auth/user/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksImlhdCI6MTYyNjkwNjc0NCwiZXhwIjoxNjI2OTkzMTQ0fQ.drPf7yQJLR1mtAJY_GPJuAKNXOidvhK3mYAhw-70638

@@ -1,19 +1,23 @@
-# vue-tuto-2021
+# frontend
 
-## Project setup
+## Préparation du projet
+
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Compilation avec Nodemon
+
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Passage à la production
+
 ```
 npm run build
 ```
 
-### Customize configuration
+### Configuration plus avancée avec Vue client
+
 See [Configuration Reference](https://cli.vuejs.org/config/).
