@@ -3,6 +3,7 @@ const User = db.users;
 const Message = db.messages;
 const Comment = db.comments;
 const { Op } = require("sequelize");
+const jwt = require("jsonwebtoken");
 
 exports.findOneUser = (req, res, next) => {
   const userData = {};
@@ -29,15 +30,22 @@ exports.findOneUser = (req, res, next) => {
 };
 
 exports.findAllUsers = (req, res, next) => {
-  User.findAll({
-    where: { id: { [Op.gt]: 0 } },
-  })
-    .then((found) => {
-      res.status(200).json({ found });
+  const token = req.headers.authorization.split(" ")[1];
+  const decodedToken = jwt.verify(token, process.env.TKN_SECRET);
+  const userId = decodedToken.userId;
+  if (userId == 1) {
+    User.findAll({
+      where: { id: { [Op.gt]: 0 } },
     })
-    .catch((error) => {
-      res.status(400).json({ error });
-    });
+      .then((found) => {
+        res.status(200).json({ found });
+      })
+      .catch((error) => {
+        res.status(400).json({ error });
+      });
+  } else {
+    console.log("You are trying to access content reserved for the admin");
+  }
 };
 
 exports.deleteOneUser = (req, res, next) => {
@@ -61,11 +69,18 @@ exports.deleteOneUser = (req, res, next) => {
 };
 
 exports.deleteMyAccount = (req, res, next) => {
-  console.log(" user Id is: " + req.params.id);
-
-  Comment.destroy({ where: { UserId: req.params.id } });
-  Message.destroy({ where: { UserId: req.params.id } });
-  User.destroy({ where: { id: req.params.id } })
-    .then(() => res.status(200).json({ message: "ok" }))
-    .catch((error) => console.log(error));
+  const token = req.headers.authorization.split(" ")[1];
+  const decodedToken = jwt.verify(token, process.env.TKN_SECRET);
+  const userId = decodedToken.userId;
+  console.log(userId + "  " + req.params.id);
+  if (Number(req.params.id) === Number(userId)) {
+    Comment.destroy({ where: { UserId: req.params.id } });
+    Message.destroy({ where: { UserId: req.params.id } });
+    User.destroy({ where: { id: req.params.id } })
+      .then(() => res.status(200).json({ message: "ok" }))
+      .catch((error) => console.log(error));
+  } else {
+    console.log("You are trying to delete an acount which is not yours");
+    res.status(403).json({ error });
+  }
 };

@@ -95,7 +95,7 @@ export default {
           .then((res) => {
             console.log(res);
             alert("Cliquez sur ok et l'utilisateur sera supprimé");
-            router.replace("http://localhost:8080/api/");
+            router.replace("/");
           })
           .catch((error) => {
             console.log(error);

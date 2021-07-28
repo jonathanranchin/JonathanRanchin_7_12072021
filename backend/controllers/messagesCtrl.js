@@ -102,6 +102,6 @@ exports.deleteMessage = (req, res, next) => {
       })
       .catch((error) => res.status(400).json({ error }));
   } else {
-    res.status(401).json({ message: " unauthorized " });
+    res.status(401).json({ message: "Unauthorized " });
   }
 };
