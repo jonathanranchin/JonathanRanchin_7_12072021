@@ -13,6 +13,17 @@ const routes = [
     component: () => import(/* webpackChunkName: "admin" */ "../views/Admin"),
   },
   {
+    path: "/ModifyComment",
+    name: "ModifyComment",
+    component: () =>
+      import(/* webpackChunkName: "ModifyComment" */ "../views/ModifyComment"),
+  },
+  {
+    path: "/Modify",
+    name: "Modify",
+    component: () => import(/* webpackChunkName: "Modify" */ "../views/Modify"),
+  },
+  {
     path: "/Compte",
     name: "Compte",
     component: () => import(/* webpackChunkName: "compte" */ "../views/Compte"),

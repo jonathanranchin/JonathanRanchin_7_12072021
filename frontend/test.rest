@@ -26,11 +26,11 @@ Content-Type: application/json
     "password" : "azerty4055"
 }
 ###
-DELETE http://localhost:3000/api/users/44
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE2LCJpYXQiOjE2Mjc0NzUzMTAsImV4cCI6MTYyNzU2MTcxMH0.SI-Xn83lezSiOH8ZbxLHi_xP-lyLj60ELOVTN1kMNFc
+DELETE http://localhost:3000/api/users/51
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE2LCJpYXQiOjE2Mjc0NzgwNjUsImV4cCI6MTYyNzU2NDQ2NX0.5SJqEg1kjMEq20zg4iGc4mImeJS5CqZDs3IC1MKBHG4
 ###
 Get http://localhost:3000/api/users/all/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE2LCJpYXQiOjE2Mjc0NzUzMTAsImV4cCI6MTYyNzU2MTcxMH0.SI-Xn83lezSiOH8ZbxLHi_xP-lyLj60ELOVTN1kMNFc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE2LCJpYXQiOjE2Mjc0NzgwNjUsImV4cCI6MTYyNzU2NDQ2NX0.5SJqEg1kjMEq20zg4iGc4mImeJS5CqZDs3IC1MKBHG4
 ###
 Get http://localhost:3000/api/messages/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE2LCJpYXQiOjE2MjczOTQ2NjksImV4cCI6MTYyNzQ4MTA2OX0.T3Gffr4C6d2urtsYthn0uiEduz0e_t9bVgVzjuuBSts

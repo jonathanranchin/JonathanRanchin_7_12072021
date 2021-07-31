@@ -3,6 +3,20 @@ const Message = db.messages;
 const User = db.users;
 const Comment = db.comments;
 
+exports.modifyMessage = (req, res, next) => {
+  console.log(req.body);
+  const message = Message.update(
+    {
+      message: req.body.message,
+      messageUrl: req.body.messageUrl,
+      imagePost: `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+      }`,
+    },
+    { where: { id: req.body.MessageId } }
+  );
+  console.log(comment);
+};
 exports.createMessage = (req, res, next) => {
   console.log("ligne 14 req.body" + req.body.messageUrl);
   let imagePost = "";

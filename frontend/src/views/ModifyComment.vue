@@ -1,0 +1,111 @@
+<template>
+  <main>
+    <section>
+      <form enctype="multipart/form-data">
+        <div>
+          <h1>
+            {{ callName() }} Vous modifier la publication numéro
+            <span> {{ callNumber() }}</span>
+          </h1>
+        </div>
+        <div>
+          <label for="modifiedComment">À vos claviers...</label>
+          <div>
+            <textarea
+              v-on:keydown="isInvalid = false"
+              v-model="modifiedComment"
+              id="modifiedComment"
+              name="comment"
+              rows="8"
+              placeholder=" Comentez ici. (1500 caractères maximum) "
+            ></textarea>
+          </div>
+        </div>
+        <div>
+          <div>
+            <button type="submit" @click.prevent="send()">Valider</button>
+          </div>
+          <router-link to="/Stream">
+            <div><a>Annuler/Retour</a></div></router-link
+          >
+        </div>
+        <div v-show="isInvalid" key="invalid">
+          <p>Saisissez votre commentaire (1500 caractères maximum) "</p>
+        </div>
+      </form>
+    </section>
+  </main>
+</template>
+
+<script>
+import axios from "axios";
+import router from "../router";
+import "../main.css";
+
+export default {
+  name: "ModifyComment",
+  data() {
+    return {
+      isAdmin: false,
+      currentUserId: "",
+      modifiedComment: "",
+      comments: [],
+      isInvalid: false,
+    };
+  },
+  methods: {
+    callName() {
+      let name = localStorage.getItem("userName");
+      return name.charAt(0).toUpperCase() + name.slice(1);
+    },
+    callNumber() {
+      return localStorage.getItem("MessageId");
+    },
+    send() {
+      if (
+        !this.modifiedComment ||
+        !localStorage.getItem("userId") ||
+        !localStorage.getItem("MessageId" || this.modifiedComment.length > 1500)
+      ) {
+        this.isInvalid = true;
+      } else {
+        let UserId = localStorage.getItem("userId");
+        let comment = this.modifiedComment.toString();
+        let commentId = localStorage.getItem("commentId");
+        axios
+          .put(
+            "http://localhost:3000/api/comments/" +
+              localStorage.getItem("commentId"),
+            { UserId, comment, commentId },
+            {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            }
+          )
+          .then(() => {
+            this.UserId = "";
+            this.newMessage = "";
+
+            alert("Commentaire Modifié!");
+            router.push({ path: "Comment" });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    },
+  },
+};
+</script>
+<style scoped>
+textarea {
+  width: 100%;
+  height: 100%;
+  margin: 1%;
+}
+a {
+  color: white;
+  text-decoration: none;
+}
+</style>

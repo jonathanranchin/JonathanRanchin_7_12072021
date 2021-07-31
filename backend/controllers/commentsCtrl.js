@@ -1,4 +1,5 @@
 const db = require("../models");
+const comment = require("../models/comment");
 const Comment = db.comments;
 const User = db.users;
 
@@ -12,6 +13,19 @@ exports.createComment = (req, res, next) => {
     .save()
     .then(() => res.status(201).json({ message: "Commentaire ajouté !" }))
     .catch((error) => res.status(400).json({ error }));
+};
+
+exports.modifyComment = (req, res, next) => {
+  const comment = Comment.update(
+    { comment: req.body.comment },
+    { where: { id: req.body.commentId } }
+  );
+  console.log(comment);
+  if (comment) {
+    return res.status(200).json(comment);
+  } else {
+    throw res.json(err);
+  }
 };
 
 exports.findOneComment = (req, res, next) => {

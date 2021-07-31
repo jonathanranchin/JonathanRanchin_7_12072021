@@ -9,6 +9,8 @@ router.get("/:Messageid", commentCtrl.findOneComment);
 
 router.post("/", auth, commentCtrl.createComment);
 
+router.put("/:MessageId", commentCtrl.modifyComment);
+
 router.delete("/", auth, commentCtrl.deleteComment);
 
 module.exports = router;

@@ -58,8 +58,13 @@
             <button
               @click="deleteMessage(messageId, messageUserId, currentUserId)"
             >
-              Delete a Post
+              Supprimer ce Post
             </button>
+          </div>
+          <div v-if="isAdmin || messageId.UserId == currentUserId">
+            <router-link to="/Modify">
+              <button>Modifier ce Post</button>
+            </router-link>
           </div>
         </div>
       </section>
@@ -94,10 +99,21 @@
             <span> n°{{ comment.id }}</span>
           </p>
           <div v-if="isAdmin || comment.UserId == currentUserId">
+            <router-link to="/ModifyComment">
+              <button
+                @click="
+                  setCommentValues(comment.id, comment.UserId, currentUserId)
+                "
+              >
+                Modifier son commentaire
+              </button></router-link
+            >
+          </div>
+          <div v-if="isAdmin || comment.UserId == currentUserId">
             <button
               @click="deleteComment(comment.id, comment.UserId, currentUserId)"
             >
-              Delete a Comment
+              Supprimer son commentaire
             </button>
           </div>
         </div>
@@ -219,6 +235,11 @@ export default {
       } else {
         return;
       }
+    },
+    setCommentValues(commId, commUid, currentUid) {
+      localStorage.setItem("commentId", commId);
+      localStorage.setItem("commentUserId", commUid);
+      localStorage.setItem("currentUID", currentUid);
     },
     deleteComment(commId, commUid, currentUid) {
       let confirmCommentDeletion = confirm(
