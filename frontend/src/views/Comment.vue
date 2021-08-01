@@ -61,7 +61,7 @@
               Supprimer ce Post
             </button>
           </div>
-          <div v-if="isAdmin || messageId.UserId == currentUserId">
+          <div v-if="isAdmin || messageUserId == currentUserId">
             <router-link to="/Modify">
               <button>Modifier ce Post</button>
             </router-link>

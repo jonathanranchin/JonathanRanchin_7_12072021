@@ -7,12 +7,12 @@
         </div>
         <div>
           <div>
-            <label for="newMessage"
+            <label for="modifiedMessage"
               >Donnez des détails sur votre publication.</label
             >
             <textarea
               v-on:keydown="isInvalid = false"
-              v-model="newMessage"
+              v-model="modifiedMessage"
               id="modifiedMessage"
               name="message"
               rows="8"
@@ -33,8 +33,8 @@
                 @change="selectFile()"
                 type="file"
                 ref="file"
-                name="image"
-                id="File"
+                name="modifiedImage"
+                id="file"
                 accept=".jpg, .jpeg, .gif, .png"
               />
             </div>
@@ -69,9 +69,8 @@ export default {
   data() {
     return {
       isAdmin: false,
-      newImage: "",
-      currentUserId: "",
-      newMessage: "",
+      modifiedImage: "",
+      modifiedMessage: "",
       file: null,
       messages: [],
       isInvalid: false,
@@ -100,21 +99,18 @@ export default {
         const formData = new FormData();
         formData.append("image", this.file);
         formData.append("UserId", localStorage.getItem("userId"));
-        formData.append("message", this.modifiedMessage.toString());
-        let messageId = localStorage.getItem("messageId");
+        formData.append("message", this.modifiedMessage);
+        formData.append("MessageId", localStorage.getItem("MessageId"));
+        let MessageId = localStorage.getItem("MessageId");
         axios
-          .put(
-            "http://localhost:3000/api/messages/" + messageId,
-            { formData, messageId },
-            {
-              headers: {
-                Authorization: "Bearer " + localStorage.getItem("token"),
-              },
-            }
-          )
+          .put("http://localhost:3000/api/messages/" + MessageId, formData, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          })
           .then(() => {
             this.UserId = "";
-            this.newMessage = "";
+            this.modifiedMessage = "";
             this.file = null;
             alert("publication modifié!");
             router.push({ path: "Stream" });

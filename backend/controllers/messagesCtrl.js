@@ -4,21 +4,28 @@ const User = db.users;
 const Comment = db.comments;
 
 exports.modifyMessage = (req, res, next) => {
-  console.log(req.body);
-  const message = Message.update(
-    {
-      message: req.body.message,
-      messageUrl: req.body.messageUrl,
-      imagePost: `${req.protocol}://${req.get("host")}/images/${
+  try {
+    let imagePost = "";
+    if (req.file) {
+      imagePost = `${req.protocol}://${req.get("host")}/images/${
         req.file.filename
-      }`,
-    },
-    { where: { id: req.body.MessageId } }
-  );
-  console.log(comment);
+      }`;
+    }
+    const obj = JSON.parse(JSON.stringify(req.body));
+    Message.update(
+      {
+        message: obj.message,
+        messageUrl: imagePost,
+      },
+      { where: { id: obj.MessageId } }
+    );
+    res.status(201).json({ message: "Publication réussie" });
+  } catch {
+    res.status(400).json({ error });
+  }
 };
+
 exports.createMessage = (req, res, next) => {
-  console.log("ligne 14 req.body" + req.body.messageUrl);
   let imagePost = "";
   if (req.file) {
     imagePost = `${req.protocol}://${req.get("host")}/images/${
@@ -30,7 +37,6 @@ exports.createMessage = (req, res, next) => {
     message: req.body.message,
     messageUrl: imagePost,
   });
-  console.log(message);
   message
     .save()
     .then(() => res.status(201).json({ message: "Publication réussie" }))
