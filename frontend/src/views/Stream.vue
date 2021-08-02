@@ -172,7 +172,7 @@ export default {
   flex-flow: row wrap;
 }
 .message {
-  background-color: rgb(190, 189, 183);
+  background: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
   color: rgb(21, 39, 70);
   margin: 1%;
   width: 47%;

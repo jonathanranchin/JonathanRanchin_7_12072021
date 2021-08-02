@@ -85,3 +85,6 @@ a {
   color: white;
   text-decoration: none;
 }
+textarea {
+  width: 100%;
+}

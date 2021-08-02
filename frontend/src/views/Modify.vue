@@ -124,7 +124,7 @@ export default {
 };
 </script>
 <style scoped>
-img {
-  max-width: 30%;
+section img {
+  max-width: 500px;
 }
 </style>
