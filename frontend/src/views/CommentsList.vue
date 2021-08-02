@@ -131,7 +131,7 @@ export default {
     seeOnePost(m) {
       console.log(m);
       localStorage.setItem("MessageId", m);
-      router.replace("http://localhost:8080/api/comment");
+      router.replace("/comment");
     },
   },
 };

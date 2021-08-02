@@ -12,6 +12,7 @@ exports.modifyMessage = (req, res, next) => {
       }`;
     }
     const obj = JSON.parse(JSON.stringify(req.body));
+    console.log(obj);
     Message.update(
       {
         message: obj.message,

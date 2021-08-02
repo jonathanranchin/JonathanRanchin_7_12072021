@@ -51,11 +51,9 @@
             <div @click="commentPage(message.id)">
               <img :src="message.messageUrl" v-if="message.messageUrl !== ''" />
             </div>
-            <div>
-              <p v-if="isAdmin || message.UserId == id">
-                {{ message.message }}
-              </p>
-            </div>
+            <p>
+              {{ message.message }}
+            </p>
             <div>
               <button @click="commentPage(message.id)">Commenter</button>
               <div v-if="isAdmin || message.UserId == id">

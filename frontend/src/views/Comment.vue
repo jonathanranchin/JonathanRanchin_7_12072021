@@ -52,7 +52,7 @@
         </div>
         <div>
           <div>
-            <div>{{ message }}</div>
+            <p>{{ message }}</p>
           </div>
           <div v-if="isAdmin || messageUserId == currentUserId">
             <button
@@ -275,12 +275,13 @@ export default {
 <style scoped>
 main {
   display: block;
+  margin-left: 5px;
 }
 section img {
   max-width: 50%;
 }
 .comment {
-  background-color: rgb(190, 189, 183);
+  background: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
   padding: 5px;
   margin: 1%;
   width: 50%;
