@@ -278,7 +278,7 @@ main {
   margin-left: 5px;
 }
 section img {
-  max-width: 50%;
+  max-width: 500px;
 }
 .comment {
   background: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);

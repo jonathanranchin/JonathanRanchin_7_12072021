@@ -45,6 +45,7 @@ exports.findAllUsers = (req, res, next) => {
       });
   } else {
     console.log("You are trying to access content reserved for the admin");
+    return res.status(401).json({ message: " unauthorized " });
   }
 };
 
@@ -64,7 +65,7 @@ exports.deleteOneUser = (req, res, next) => {
       })
       .catch((error) => res.status(400).json({ error }));
   } else {
-    res.status(401).json({ message: " unauthorized " });
+    return res.status(401).json({ message: " unauthorized " });
   }
 };
 
@@ -81,6 +82,6 @@ exports.deleteMyAccount = (req, res, next) => {
       .catch((error) => console.log(error));
   } else {
     console.log("You are trying to delete an acount which is not yours");
-    res.status(403).json({ error });
+    return res.status(403).json({ error });
   }
 };
