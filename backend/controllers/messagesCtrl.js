@@ -20,7 +20,7 @@ exports.modifyMessage = (req, res, next) => {
       },
       { where: { id: obj.MessageId } }
     );
-    res.status(201).json({ message: "Publication réussie" });
+    res.status(200).json({ message: "Publication réussie" });
   } catch {
     return res.status(400).json({ error });
   }

@@ -5,6 +5,7 @@ const helmet = require("helmet");
 const path = require("path");
 const auth = require("./middleware/auth");
 const app = express();
+const rateLimit = require("express-rate-limit");
 
 const dataBase = require("./models");
 
@@ -22,7 +23,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 dataBase.sequelize.sync();
 
 app.use("/images", express.static(path.join(__dirname, "images")));
-app.use("/api/auth", authRoutes);
+app.use(
+  "/api/auth",
+  rateLimit({
+    windowMs: 12 * 60 * 60 * 1000, // 12 hour duration in milliseconds
+    max: 10,
+    headers: true,
+  }),
+  authRoutes
+);
 
 app.use("/api/users", auth, userRoutes);
 app.use("/api/messages", auth, messageRoutes);

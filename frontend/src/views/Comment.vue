@@ -247,7 +247,7 @@ export default {
       );
       if (confirmCommentDeletion == true) {
         axios
-          .delete("http://localhost:3000/api/comments/", {
+          .delete("http://localhost:3000/api/comments/" + commId, {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("token"),
             },

@@ -2,6 +2,7 @@ const db = require("../models");
 const comment = require("../models/comment");
 const Comment = db.comments;
 const User = db.users;
+const jwt = require("jsonwebtoken");
 
 exports.createComment = (req, res, next) => {
   const comment = new Comment({
@@ -57,8 +58,47 @@ exports.deleteComment = (req, res, next) => {
   console.log(" comment id is: " + req.query.commentId);
   console.log(" comment Uid is : " + req.query.commentUid);
   console.log(" currentUid who ask the deletion is : " + req.query.currentUid);
-
-  Comment.destroy({ where: { id: req.query.commentId } })
-    .then(() => res.status(200).json({ message: "Commentaire supprimé !" }))
-    .catch((error) => res.status(400).json({ error }));
+  const commentId = req.query.commentId;
+  const token = req.headers.authorization.split(" ")[1];
+  const decodedToken = jwt.verify(token, process.env.TKN_SECRET);
+  const userId = decodedToken.userId;
+  User.findOne({
+    where: { id: userId },
+  })
+    .then((user) => {
+      Comment.findOne({
+        where: {
+          id: commentId,
+        },
+      })
+        .then((comment) => {
+          if (user && (user.isAdmin || user.id == comment.userId)) {
+            Comment.destroy({
+              where: { id: comment.id },
+            })
+              .then(() => {
+                return res.status(200).json({
+                  message: "Publication supprimée",
+                  comments: comment,
+                });
+              })
+              .catch(() => {
+                console.error(error.message);
+                return res.status(500).json({ error });
+              });
+          } else {
+            return res.status(403).json({
+              message: "Vous n'avez pas d'autorisation effacer ce post !",
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error.message);
+          res.status(404).json({ message: "Le commentaire n'existe pas!" });
+        });
+    })
+    .catch((error) => {
+      console.error(error.message);
+      return res.status(500).json({ error });
+    });
 };

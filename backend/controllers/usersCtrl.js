@@ -33,20 +33,29 @@ exports.findAllUsers = (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
   const decodedToken = jwt.verify(token, process.env.TKN_SECRET);
   const userId = decodedToken.userId;
-  if (userId == 1) {
-    User.findAll({
-      where: { id: { [Op.gt]: 0 } },
+  User.findOne({
+    where: { id: userId },
+  })
+    .then((user) => {
+      if (user && user.isAdmin == 1) {
+        User.findAll({
+          where: { id: { [Op.gt]: 0 } },
+        })
+          .then((found) => {
+            res.status(200).json({ found });
+          })
+          .catch((error) => {
+            res.status(400).json({ error });
+          });
+      } else {
+        console.log("You are trying to access content reserved for the admin");
+        return res.status(401).json({ message: " unauthorized " });
+      }
     })
-      .then((found) => {
-        res.status(200).json({ found });
-      })
-      .catch((error) => {
-        res.status(400).json({ error });
-      });
-  } else {
-    console.log("You are trying to access content reserved for the admin");
-    return res.status(401).json({ message: " unauthorized " });
-  }
+    .catch((error) => {
+      console.error(error.message);
+      return res.status(500).json({ error });
+    });
 };
 
 exports.deleteOneUser = (req, res, next) => {
