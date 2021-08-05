@@ -17,10 +17,50 @@ exports.createComment = (req, res, next) => {
 };
 
 exports.modifyComment = (req, res, next) => {
-  const comment = Comment.update(
-    { comment: req.body.comment },
-    { where: { id: req.body.commentId } }
-  );
+  const commentId = req.query.commentId;
+  const token = req.headers.authorization.split(" ")[1];
+  const decodedToken = jwt.verify(token, process.env.TKN_SECRET);
+  const userId = decodedToken.userId;
+  User.findOne({
+    where: { id: userId },
+  })
+    .then((user) => {
+      Comment.findOne({
+        where: {
+          id: commentId,
+        },
+      })
+        .then((comment) => {
+          if (user && (user.isAdmin || user.id == comment.userId)) {
+            const comment = Comment.update(
+              { comment: req.body.comment },
+              { where: { id: req.body.commentId } }
+            )
+              .then(() => {
+                return res.status(200).json({
+                  message: "Publication modifié",
+                  comments: comment,
+                });
+              })
+              .catch(() => {
+                console.error(error.message);
+                return res.status(500).json({ error });
+              });
+          } else {
+            return res.status(403).json({
+              message: "Vous n'avez pas d'autorisation modifier ce post !",
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error.message);
+          res.status(404).json({ message: "Le commentaire n'existe pas!" });
+        });
+    })
+    .catch((error) => {
+      console.error(error.message);
+      return res.status(500).json({ error });
+    });
   console.log(comment);
   if (comment) {
     return res.status(200).json(comment);
