@@ -61,21 +61,34 @@ exports.findAllUsers = (req, res, next) => {
 exports.deleteOneUser = (req, res, next) => {
   console.log(" user Id is: " + req.query.uid);
   console.log(" User Id who ask the deletion is sAdmin : " + req.query.isAdmin);
-
-  console.log(req.query.isAdmin);
-  if (req.query.isAdmin) {
-    User.destroy({ where: { id: req.query.uid } });
-    Message.destroy({ where: { UserId: req.query.uid } });
-    Comment.destroy({ where: { UserId: req.query.uid } })
-      .then((res) => {
-        res.status(200).json({
-          message: "User, its Messages and its comments have been destroyed",
-        });
-      })
-      .catch((error) => res.status(400).json({ error }));
-  } else {
-    return res.status(401).json({ message: " unauthorized " });
-  }
+  const obj = JSON.parse(JSON.stringify(req.body));
+  const token = req.headers.authorization.split(" ")[1];
+  const decodedToken = jwt.verify(token, process.env.TKN_SECRET);
+  const userId = decodedToken.userId;
+  User.findOne({
+    where: { id: userId },
+  })
+    .then((user) => {
+      console.log(user.isAdmin);
+      if (user.isAdmin) {
+        User.destroy({ where: { id: req.query.uid } });
+        Message.destroy({ where: { UserId: req.query.uid } });
+        Comment.destroy({ where: { UserId: req.query.uid } })
+          .then((res) => {
+            res.status(200).json({
+              message:
+                "User, its Messages and its comments have been destroyed",
+            });
+          })
+          .catch((error) => res.status(400).json({ error }));
+      } else {
+        return res.status(401).json({ message: " unauthorized " });
+      }
+    })
+    .catch((error) => {
+      console.error(error.message);
+      return res.status(500).json({ error });
+    });
 };
 
 exports.deleteMyAccount = (req, res, next) => {
