@@ -157,7 +157,7 @@ exports.deleteMessage = (req, res, next) => {
       })
         .then((comment) => {
           if (user && (user.isAdmin || user.id == comment.userId)) {
-            if (req.query.messageUid == req.query.uid || req.query.uid == 1) {
+            if (req.query.messageUid == req.query.uid || user.isAdmin) {
               Comment.destroy({ where: { MessageId: req.query.messageId } });
               Message.destroy({ where: { id: req.query.messageId } })
                 .then((res) => {
