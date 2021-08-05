@@ -2,28 +2,59 @@ const db = require("../models");
 const Message = db.messages;
 const User = db.users;
 const Comment = db.comments;
+const jwt = require("jsonwebtoken");
 
 exports.modifyMessage = (req, res, next) => {
-  try {
-    let imagePost = "";
-    if (req.file) {
-      imagePost = `${req.protocol}://${req.get("host")}/images/${
-        req.file.filename
-      }`;
-    }
-    const obj = JSON.parse(JSON.stringify(req.body));
-    console.log(obj);
-    Message.update(
-      {
-        message: obj.message,
-        messageUrl: imagePost,
-      },
-      { where: { id: obj.MessageId } }
-    );
-    res.status(200).json({ message: "Publication réussie" });
-  } catch {
-    return res.status(400).json({ error });
-  }
+  const obj = JSON.parse(JSON.stringify(req.body));
+  const token = req.headers.authorization.split(" ")[1];
+  const decodedToken = jwt.verify(token, process.env.TKN_SECRET);
+  const userId = decodedToken.userId;
+  User.findOne({
+    where: { id: userId },
+  })
+    .then((user) => {
+      Message.findOne({
+        where: {
+          id: obj.MessageId,
+        },
+      })
+        .then((comment) => {
+          if (user && (user.isAdmin || user.id == comment.userId)) {
+            try {
+              let imagePost = "";
+              if (req.file) {
+                imagePost = `${req.protocol}://${req.get("host")}/images/${
+                  req.file.filename
+                }`;
+              }
+              const obj = JSON.parse(JSON.stringify(req.body));
+              console.log(obj);
+              Message.update(
+                {
+                  message: obj.message,
+                  messageUrl: imagePost,
+                },
+                { where: { id: obj.MessageId } }
+              );
+              res.status(200).json({ message: "Publication réussie" });
+            } catch {
+              return res.status(400).json({ error });
+            }
+          } else {
+            return res.status(403).json({
+              message: "Vous n'avez pas d'autorisation effacer ce post !",
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error.message);
+          res.status(404).json({ message: "Le commentaire n'existe pas!" });
+        });
+    })
+    .catch((error) => {
+      console.error(error.message);
+      return res.status(500).json({ error });
+    });
 };
 
 exports.createMessage = (req, res, next) => {
@@ -111,18 +142,46 @@ exports.deleteMessage = (req, res, next) => {
   console.log(" message Id is: " + req.query.messageId);
   console.log(" message User Id is : " + req.query.messageUid);
   console.log(" User Id who ask the deletion is : " + req.query.uid);
-
-  console.log(req.query.messageUid == req.query.uid || req.query.uid == 1);
-  if (req.query.messageUid == req.query.uid || req.query.uid == 1) {
-    Comment.destroy({ where: { MessageId: req.query.messageId } });
-    Message.destroy({ where: { id: req.query.messageId } })
-      .then((res) => {
-        res
-          .status(200)
-          .json({ message: "Message and its comments have been destroyed" });
+  const obj = JSON.parse(JSON.stringify(req.body));
+  const token = req.headers.authorization.split(" ")[1];
+  const decodedToken = jwt.verify(token, process.env.TKN_SECRET);
+  const userId = decodedToken.userId;
+  User.findOne({
+    where: { id: userId },
+  })
+    .then((user) => {
+      Message.findOne({
+        where: {
+          id: req.query.messageId,
+        },
       })
-      .catch((error) => res.status(400).json({ error }));
-  } else {
-    return res.status(401).json({ message: "Unauthorized " });
-  }
+        .then((comment) => {
+          if (user && (user.isAdmin || user.id == comment.userId)) {
+            if (req.query.messageUid == req.query.uid || req.query.uid == 1) {
+              Comment.destroy({ where: { MessageId: req.query.messageId } });
+              Message.destroy({ where: { id: req.query.messageId } })
+                .then((res) => {
+                  res.status(200).json({
+                    message: "Message and its comments have been destroyed",
+                  });
+                })
+                .catch((error) => res.status(400).json({ error }));
+            } else {
+              return res.status(401).json({ message: "Unauthorized " });
+            }
+          } else {
+            return res.status(403).json({
+              message: "Vous n'avez pas d'autorisation effacer ce post !",
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error.message);
+          res.status(404).json({ message: "Le commentaire n'existe pas!" });
+        });
+    })
+    .catch((error) => {
+      console.error(error.message);
+      return res.status(500).json({ error });
+    });
 };

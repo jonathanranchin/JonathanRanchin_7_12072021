@@ -11,6 +11,6 @@ router.post("/", auth, commentCtrl.createComment);
 
 router.put("/:MessageId", auth, commentCtrl.modifyComment);
 
-router.delete("/:CommentId", auth, commentCtrl.deleteComment); //ajout de l'id du commentaire
+router.delete("/:CommentId", auth, commentCtrl.deleteComment);
 
 module.exports = router;
